@@ -1,0 +1,37 @@
+#code in python for compare two xml files tag by tag
+#This script uses the xml.etree.ElementTree module to parse the XML files and compares the tags, text content, and attributes of each element recursively. 
+#If any differences are found, it will print information about the discrepancies.
+
+#Make sure to replace 'file1.xml' and 'file2.xml' with the actual file paths of your XML files. 
+#Note that this script assumes that the XML files have the same structure, and it doesn't handle cases where the structure might differ. 
+#If you need a more sophisticated solution, consider using a dedicated XML comparison library such as xml_diff or xml-comparer.
+
+import xml.etree.ElementTree as ET
+
+def compare_xml_files(file1_path, file2_path):
+    tree1 = ET.parse(file1_path)
+    tree2 = ET.parse(file2_path)
+
+    root1 = tree1.getroot()
+    root2 = tree2.getroot()
+
+    compare_elements(root1, root2)
+
+def compare_elements(elem1, elem2):
+    if elem1.tag != elem2.tag:
+        print(f"Tags differ: {elem1.tag} vs {elem2.tag}")
+
+    if elem1.text != elem2.text:
+        print(f"Text content differs: '{elem1.text}' vs '{elem2.text}'")
+
+    if elem1.attrib != elem2.attrib:
+        print(f"Attributes differ: {elem1.attrib} vs {elem2.attrib}")
+
+    # Recursively compare child elements
+    for child1, child2 in zip(elem1, elem2):
+        compare_elements(child1, child2)
+
+if __name__ == "__main__":
+    # Replace 'file1.xml' and 'file2.xml' with the paths to your XML files
+    compare_xml_files('file1.xml', 'file2.xml')
+
